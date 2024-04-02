@@ -1,4 +1,5 @@
-﻿using DotNet8WebAPIDemo.Helpers;
+﻿using Asp.Versioning;
+using DotNet8WebAPIDemo.Helpers;
 using DotNet8WebAPIDemo.Models;
 using DotNet8WebAPIDemo.Services;
 using Microsoft.AspNetCore.Http;
@@ -6,9 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DotNet8WebAPIDemo.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [ApiVersion(1, Deprecated = true)]
+    [ApiVersion(2)]
+    [Route("api/v{v:apiVersion}/[controller]")]
+    
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -24,11 +28,25 @@ namespace DotNet8WebAPIDemo.Controllers
             return Ok(await _productService.GetAllProductsAsync(isActive));
         }
 
+        [MapToApiVersion(1)]
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetV1(int id)
         {
             var hero =await _productService.GetProductByID(id);
+            if (hero == null)
+            {
+                return NotFound();
+            }
+            return Ok(hero);
+        }
+
+        [MapToApiVersion(2)]
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetV2(int id)
+        {
+            var hero = await _productService.GetProductByID(id);
             if (hero == null)
             {
                 return NotFound();

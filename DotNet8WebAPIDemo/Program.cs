@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using DotNet8WebAPIDemo.Entity;
 using DotNet8WebAPIDemo.Helpers;
 using DotNet8WebAPIDemo.Models;
@@ -53,6 +54,19 @@ builder.Services.AddSwaggerGen(swagger =>
 
                     }
                 });
+});
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1);
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader(),
+        new HeaderApiVersionReader("X-Api-Version"));
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'V";
+    options.SubstituteApiVersionInUrl = true;
 });
 var app = builder.Build();
 
