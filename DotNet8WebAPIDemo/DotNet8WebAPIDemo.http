@@ -1,0 +1,14 @@
+@DotNet8WebAPIDemo_HostAddress = https://localhost:7235
+
+GET {{DotNet8WebAPIDemo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{DotNet8WebAPIDemo_HostAddress}}/api/products
+
+###
+
+DELETE {{DotNet8WebAPIDemo_HostAddress}}/api/products/1
+
+###
