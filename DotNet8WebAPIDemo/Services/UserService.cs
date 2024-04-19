@@ -68,7 +68,7 @@ namespace DotNet8WebAPIDemo.Services
         // helper methods
         private async Task<string> generateJwtToken(User user)
         {
-            //Generate token that is valid for 7 days
+            //Generate token that is valid for 1 day
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = await Task.Run(() =>
             {
@@ -77,7 +77,7 @@ namespace DotNet8WebAPIDemo.Services
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                    Expires = DateTime.UtcNow.AddDays(7),
+                    Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 return tokenHandler.CreateToken(tokenDescriptor);
